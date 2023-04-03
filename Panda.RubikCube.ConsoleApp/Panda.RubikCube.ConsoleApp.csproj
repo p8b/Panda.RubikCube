@@ -8,6 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Spectre.Console" Version="0.46.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Panda.RubikCube\Panda.RubikCube.csproj" />
   </ItemGroup>
 
