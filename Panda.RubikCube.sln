@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.33516.290
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Panda.RubikCube", "Panda.RubikCube\Panda.RubikCube.csproj", "{00D420C3-0D78-4E29-9059-E8791AAD67F7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Panda.RubikCube", "Panda.RubikCube\Panda.RubikCube.csproj", "{00D420C3-0D78-4E29-9059-E8791AAD67F7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Panda.RubikCube.ConsoleApp", "Panda.RubikCube.ConsoleApp\Panda.RubikCube.ConsoleApp.csproj", "{BA1A2400-3BF3-483C-815C-EE8CC67B3290}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Panda.RubikCube.ConsoleApp", "Panda.RubikCube.ConsoleApp\Panda.RubikCube.ConsoleApp.csproj", "{BA1A2400-3BF3-483C-815C-EE8CC67B3290}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Panda.RubikCube.ConsoleApp.Tests", "Panda.RubikCube.ConsoleApp.Tests\Panda.RubikCube.ConsoleApp.Tests.csproj", "{6443B423-5DB0-4F52-A304-CECD5797CCAC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Panda.RubikCube.ConsoleApp.Tests", "Panda.RubikCube.ConsoleApp.Tests\Panda.RubikCube.ConsoleApp.Tests.csproj", "{6443B423-5DB0-4F52-A304-CECD5797CCAC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Panda.RubikCube.Tests", "Panda.RubikCube.Tests\Panda.RubikCube.Tests.csproj", "{13883D11-7AE5-48EE-9B13-9713BFB80BC9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Panda.RubikCube.Tests", "Panda.RubikCube.Tests\Panda.RubikCube.Tests.csproj", "{13883D11-7AE5-48EE-9B13-9713BFB80BC9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
