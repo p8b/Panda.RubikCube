@@ -3,186 +3,131 @@ using Panda.RubikCube.Enums;
 
 namespace Panda.RubikCube.Tests
 {
-    public class CubeletTests
-    {
-        [Fact]
-        public void Constructor_DefaultPosition_IsCorrect()
-        {
-            // Arrange
-            var expectedPosition = ("x", "x");
+	public class CubeletTests
+	{
+		[Fact]
+		public void Constructor_SetsParameters_Correctly()
+		{
+			// Arrange
+			var expectedPosition = ("1", "2");
+			const CubeletColour expectedColour = CubeletColour.Green;
 
-            // Act
-            var cubelet = new Cubelet(CubeletColour.Green);
+			// Act
+			var cubelet = new Cubelet(expectedColour, (1, 2));
 
-            // Assert
-            Assert.Equal(expectedPosition, cubelet.OriginalPositon);
-        }
+			// Assert
+			Assert.Equal(expectedPosition, cubelet.OriginalPositon);
+			Assert.Equal(expectedColour, cubelet.Colour);
+		}
 
-        [Fact]
-        public void Constructor_CustomPosition_IsCorrect()
-        {
-            // Arrange
-            var expectedPosition = ("1", "2");
+		[Theory]
+		[InlineData(CubeletColour.Green, 1, 1)]
+		[InlineData(CubeletColour.Blue, 1, 1)]
+		[InlineData(CubeletColour.Red, 1, 1)]
+		[InlineData(CubeletColour.Orange, 1, 1)]
+		[InlineData(CubeletColour.White, 1, 1)]
+		[InlineData(CubeletColour.Yellow, 1, 1)]
+		public void StaticMethods_CreateCubeletCorrectly(CubeletColour colour, int row, int column)
+		{
+			// Arrange
+			var position = (row, column);
+			var expectedPosition = (row.ToString(), column.ToString());
 
-            // Act
-            var cubelet = new Cubelet(CubeletColour.Green, (1, 2));
+			// Act
+			var cubelet = colour switch
+			{
+				CubeletColour.Green => Cubelet.Green(position),
+				CubeletColour.Blue => Cubelet.Blue(position),
+				CubeletColour.Red => Cubelet.Red(position),
+				CubeletColour.Orange => Cubelet.Orange(position),
+				CubeletColour.White => Cubelet.White(position),
+				_ => Cubelet.Yellow(position),
+			};
 
-            // Assert
-            Assert.Equal(expectedPosition, cubelet.OriginalPositon);
-        }
+			// Assert
+			Assert.Equal(colour, cubelet.Colour);
+			Assert.Equal(expectedPosition, cubelet.OriginalPositon);
+		}
 
-        [Theory]
-        [InlineData(CubeletColour.Green)]
-        [InlineData(CubeletColour.Blue)]
-        [InlineData(CubeletColour.Red)]
-        [InlineData(CubeletColour.Orange)]
-        [InlineData(CubeletColour.White)]
-        [InlineData(CubeletColour.Yellow)]
-        public void StaticMethods_CreateCubeletWithCorrectColor(CubeletColour colour)
-        {
-            // Act
-            var cubelet = colour switch
-            {
-                CubeletColour.Green => Cubelet.Green(),
-                CubeletColour.Blue => Cubelet.Blue(),
-                CubeletColour.Red => Cubelet.Red(),
-                CubeletColour.Orange => Cubelet.Orange(),
-                CubeletColour.White => Cubelet.White(),
-                _ => Cubelet.Yellow(),
-            };
+		[Fact]
+		public void EqualityCheck_ShouldPass()
+		{
+			// Arrange
+			var cubelet1 = new Cubelet(CubeletColour.Green, (1, 1));
+			var cubelet2 = new Cubelet(CubeletColour.Green, (1, 1));
 
-            // Assert
-            Assert.Equal(colour, cubelet.Colour);
-        }
+			// Act
+			var areEqual = cubelet1.Equals(cubelet2);
+			var hashCode1 = cubelet1.GetHashCode();
+			var hashCode2 = cubelet2.GetHashCode();
 
-        [Fact]
-        public void CubeletsWithSameColourAreEqual()
-        {
-            // Arrange
-            var cubelet1 = new Cubelet(CubeletColour.Green);
-            var cubelet2 = new Cubelet(CubeletColour.Green);
+			// Assert
+			Assert.True(areEqual);
+			Assert.Equal(hashCode1, hashCode2);
+		}
 
-            // Act
-            var areEqual = cubelet1 == cubelet2;
+		[Fact]
+		public void EqualityCheckWithDifferentColour_ShouldFail()
+		{
+			// Arrange
+			var cubelet1 = new Cubelet(CubeletColour.Orange, (1, 1));
+			var cubelet2 = new Cubelet(CubeletColour.Green, (1, 1));
 
-            // Assert
-            Assert.True(areEqual);
-        }
+			// Act
+			var areEqual = cubelet1.Equals(cubelet2);
+			var hashCode1 = cubelet1.GetHashCode();
+			var hashCode2 = cubelet2.GetHashCode();
 
-        [Fact]
-        public void CubeletsWithSameColourAreNotEqual()
-        {
-            // Arrange
-            var cubelet1 = new Cubelet(CubeletColour.Orange);
-            var cubelet2 = new Cubelet(CubeletColour.Green);
+			// Assert
+			Assert.False(areEqual);
+			Assert.NotEqual(hashCode1, hashCode2);
+		}
 
-            // Act
-            var areNotEqual = cubelet1 != cubelet2;
+		[Fact]
+		public void EqualityCheckWithDifferentOriginalPosition_ShouldFail()
+		{
+			// Arrange
+			var cubelet1 = new Cubelet(CubeletColour.Green, (1, 2));
+			var cubelet2 = new Cubelet(CubeletColour.Green, (2, 1));
 
-            // Assert
-            Assert.True(areNotEqual);
-        }
+			// Act
+			var areEqual = cubelet1.Equals(cubelet2);
+			var hashCode1 = cubelet1.GetHashCode();
+			var hashCode2 = cubelet2.GetHashCode();
 
-        [Fact]
-        public void CubeletsWithDifferentColourAreNotEqual()
-        {
-            // Arrange
-            var cubelet1 = new Cubelet(CubeletColour.Green);
-            var cubelet2 = new Cubelet(CubeletColour.Blue);
+			// Assert
+			Assert.False(areEqual);
+			Assert.NotEqual(hashCode1, hashCode2);
+		}
 
-            // Act
-            var areEqual = cubelet1 == cubelet2;
+		[Fact]
+		public void EqualityCheckWithObjectOfDifferentType_ShouldFail()
+		{
+			// Arrange
+			var cubelet = new Cubelet(CubeletColour.Green, (1, 1));
+			var otherObject = new object();
 
-            // Assert
-            Assert.False(areEqual);
-        }
+			// Act
+			var areEqual = cubelet.Equals(otherObject);
+			var hashCode1 = cubelet.GetHashCode();
+			var hashCode2 = otherObject.GetHashCode();
 
-        [Fact]
-        public void CubeletsWithSameColourHaveSameHashCode()
-        {
-            // Arrange
-            var cubelet1 = new Cubelet(CubeletColour.Green);
-            var cubelet2 = new Cubelet(CubeletColour.Green);
+			// Assert
+			Assert.False(areEqual);
+			Assert.NotEqual(hashCode1, hashCode2);
+		}
 
-            // Act
-            var hashCode1 = cubelet1.GetHashCode();
-            var hashCode2 = cubelet2.GetHashCode();
+		[Fact]
+		public void EqualityCheckWithNull_ShouldFail()
+		{
+			// Arrange
+			var cubelet = new Cubelet(CubeletColour.Green, (1, 1));
 
-            // Assert
-            Assert.Equal(hashCode1, hashCode2);
-        }
+			// Act
+			var areEqual = cubelet.Equals(null);
 
-        [Fact]
-        public void CubeletsWithDifferentColourHaveDifferentHashCode()
-        {
-            // Arrange
-            var cubelet1 = new Cubelet(CubeletColour.Green);
-            var cubelet2 = new Cubelet(CubeletColour.Blue);
-
-            // Act
-            var hashCode1 = cubelet1.GetHashCode();
-            var hashCode2 = cubelet2.GetHashCode();
-
-            // Assert
-            Assert.NotEqual(hashCode1, hashCode2);
-        }
-
-        [Fact]
-        public void CubeletsWithSameOriginalPositionAreEqual()
-        {
-            // Arrange
-            var position = (row: 1, column: 2);
-            var cubelet1 = new Cubelet(CubeletColour.Green, position);
-            var cubelet2 = new Cubelet(CubeletColour.Green, position);
-
-            // Act
-            var areEqual = cubelet1 == cubelet2;
-
-            // Assert
-            Assert.True(areEqual);
-        }
-
-        [Fact]
-        public void CubeletsWithDifferentOriginalPositionAreEqual()
-        {
-            // Arrange
-            var position1 = (row: 1, column: 2);
-            var position2 = (row: 2, column: 1);
-            var cubelet1 = new Cubelet(CubeletColour.Green, position1);
-            var cubelet2 = new Cubelet(CubeletColour.Green, position2);
-
-            // Act
-            var areEqual = cubelet1 == cubelet2;
-
-            // Assert
-            Assert.True(areEqual);
-        }
-
-        [Fact]
-        public void CubeletsAreNotEqualToObjectOfDifferentType()
-        {
-            // Arrange
-            var cubelet = new Cubelet(CubeletColour.Green);
-            var otherObject = new object();
-
-            // Act
-            var areEqual = cubelet.Equals(otherObject);
-
-            // Assert
-            Assert.False(areEqual);
-        }
-
-        [Fact]
-        public void CubeletsAreNotEqualToNull()
-        {
-            // Arrange
-            var cubelet = new Cubelet(CubeletColour.Green);
-
-            // Act
-            var areEqual = cubelet.Equals(null);
-
-            // Assert
-            Assert.False(areEqual);
-        }
-    }
+			// Assert
+			Assert.False(areEqual);
+		}
+	}
 }

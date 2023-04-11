@@ -7,8 +7,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Panda.RubikCube", "Panda.Ru
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Panda.RubikCube.ConsoleApp", "Panda.RubikCube.ConsoleApp\Panda.RubikCube.ConsoleApp.csproj", "{BA1A2400-3BF3-483C-815C-EE8CC67B3290}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Panda.RubikCube.ConsoleApp.Tests", "Panda.RubikCube.ConsoleApp.Tests\Panda.RubikCube.ConsoleApp.Tests.csproj", "{6443B423-5DB0-4F52-A304-CECD5797CCAC}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Panda.RubikCube.Tests", "Panda.RubikCube.Tests\Panda.RubikCube.Tests.csproj", "{13883D11-7AE5-48EE-9B13-9713BFB80BC9}"
 EndProject
 Global
@@ -25,10 +23,6 @@ Global
 		{BA1A2400-3BF3-483C-815C-EE8CC67B3290}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BA1A2400-3BF3-483C-815C-EE8CC67B3290}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BA1A2400-3BF3-483C-815C-EE8CC67B3290}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6443B423-5DB0-4F52-A304-CECD5797CCAC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6443B423-5DB0-4F52-A304-CECD5797CCAC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6443B423-5DB0-4F52-A304-CECD5797CCAC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6443B423-5DB0-4F52-A304-CECD5797CCAC}.Release|Any CPU.Build.0 = Release|Any CPU
 		{13883D11-7AE5-48EE-9B13-9713BFB80BC9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{13883D11-7AE5-48EE-9B13-9713BFB80BC9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{13883D11-7AE5-48EE-9B13-9713BFB80BC9}.Release|Any CPU.ActiveCfg = Release|Any CPU
