@@ -1,0 +1,118 @@
+name: 'Panda.RubikCube'
+variables:
+- group: 'GitHub Details'
+- group: 'NuGet Feed'
+- name: ProjectFile
+  value: 'Panda.RubikCube.csproj'
+- name: RepositoryName
+  value: 'Panda.RubikCube'
+- name: BuildConfiguration
+  value: Release
+trigger:
+  branches:
+    include:
+    - master
+  paths:
+    include:
+    - Panda.RubikCube/*
+stages:
+- stage: Build
+  jobs:
+  - job: Job
+    displayName: Build Package
+    pool:
+      name: Azure Pipelines
+    steps:
+    - checkout: self
+    - powershell: |
+        echo "Getting version from $env:PROJECTFILE"
+        $xml = [Xml] (Get-Content **\$env:PROJECTFILE)
+        $version = "$($xml.Project.PropertyGroup.Version)".Trim()
+        $isPreRelease = ($version -like '*-pre*')
+        Write-Host "##vso[task.setvariable variable=Version;isOutput=true]$version"
+        Write-Host "##vso[task.setvariable variable=IsPreRelease;isOutput=true]$isPreRelease"
+        echo "Set variable: Version - $version"
+      name: VersionOutput
+      displayName: Get Version from $(ProjectFile)
+      errorActionPreference: stop
+    - task: DotNetCoreCLI@2
+      displayName: Restore Project
+      inputs:
+        command: restore
+        projects: '**/$(ProjectFile)'
+        feedRestore: '$(FeedId)'
+    - task: DotNetCoreCLI@2
+      displayName: Build Project
+      inputs:
+        command: 'build'
+        projects: '**/$(ProjectFile)'
+        arguments: --configuration $(BuildConfiguration)
+    - task: DotNetCoreCLI@2
+      displayName: Test Project
+      inputs:
+        command: test
+        projects: '**/*[Tt]ests/*.csproj'
+        arguments: --configuration $(BuildConfiguration)
+    - task: DotNetCoreCLI@2
+      displayName: Pack NuGet Package
+      inputs:
+        command: 'pack'
+        packagesToPack: '**/$(ProjectFile)'
+        includesymbols: true
+        versioningScheme: 'off'
+    - task: PublishBuildArtifacts@1
+      displayName: Publish drop
+      inputs:
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+        ArtifactName: 'drop'
+        publishLocation: 'Container'
+- stage: Release
+  dependsOn: Build
+  jobs:
+  - deployment: release_nuget_package
+    displayName: Release NuGet Package
+    environment: Production
+    variables:
+     - name: Version
+       value: $[stageDependencies.Build.Job.outputs['VersionOutput.Version']]
+     - name: IsPreRelease
+       value: $[eq(stageDependencies.Build.Job.outputs['VersionOutput.IsPreRelease'], 'true')]
+    pool:
+     name: Azure Pipelines
+    strategy:
+     runOnce:
+      deploy:
+        steps:
+        - checkout: self
+          persistCredentials: true
+        - task: DotNetCoreCLI@2
+          displayName: Push NuGet Package
+          inputs:
+           command: 'push'
+           packagesToPush: '$(Pipeline.Workspace)/drop/*.symbols.nupkg'
+           nuGetFeedType: 'internal'
+           publishVstsFeed: '$(FeedId)'
+        - task: PowerShell@2
+          displayName: Create GitHub Tag for Version $(Version)
+          inputs:
+           targetType: 'inline'
+           script: |
+             echo "Generating tag for $(Version)..."
+             git config user.email "Azure.Devops@pipeline.com"
+             git config user.name "Azure DevOps Pipeline"
+             git tag -a $("$(Version)") -m $("Release $(Version)")
+             git push --tags
+           errorActionPreference: stop
+        - task: GitHubRelease@1
+          displayName: Create GitHub Release
+          inputs:
+            gitHubConnection: '$(GitHubServiceConnection)'
+            repositoryName: '$(GitHubAccount)/$(RepositoryName)'
+            action: 'create'
+            target: '$(Build.SourceVersion)'
+            tagSource: 'gitTag'
+            tag: $(Version)
+            changeLogCompareToRelease: 'lastFullRelease'
+            changeLogType: 'commitBased'
+            isPreRelease: $(isPreRelease)
+...

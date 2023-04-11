@@ -5,6 +5,17 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+	<PropertyGroup>
+		<PackageId>Panda.RubikCube</PackageId>
+		<Version>1.0.0-pre.1</Version>
+		<Authors>P8BPanda</Authors>
+		<PackageIconUrl>https://static.p8b.uk/public/images/P8B/panda-nuget.png</PackageIconUrl>
+		<Description>A simple proxy middleware that allows the developer to handle the incoming request.</Description>
+		<RepositoryUrl>https://github.com/p8b/Panda.RubikCube</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+	</PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
   </ItemGroup>
