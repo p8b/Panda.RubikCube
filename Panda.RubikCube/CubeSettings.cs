@@ -20,6 +20,7 @@ namespace Panda.RubikCube
         {
             if (size < 1 || size > 3)
                 throw new ArgumentException("Size can only be 1, 2 or 3.");
+
             Size = size;
             CubeletColours[(int)FaceSide.Front] = front;
             CubeletColours[(int)FaceSide.Right] = right;
